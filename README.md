@@ -12,7 +12,7 @@ source source_me.sh
 make
 ```
 
-### To build the userspace applications and tun the OS
+### To build the userspace applications and run the OS
 ```
 make qemu
 ```
