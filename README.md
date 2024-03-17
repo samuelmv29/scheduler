@@ -55,7 +55,7 @@ make qemu
 
 ### To exit xv6
 ```
-ctrl-a ctrl-x
+ctrl-a x
 ```
 
 
