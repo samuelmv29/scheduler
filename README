@@ -41,9 +41,21 @@ Please send errors and suggestions to Frans Kaashoek and Robert Morris
 operating system for MIT's 6.1810, so we are more interested in
 simplifications and clarifications than new features.
 
-BUILDING AND RUNNING XV6
+##BUILDING AND RUNNING XV6
 
-You will need a RISC-V "newlib" tool chain from
-https://github.com/riscv/riscv-gnu-toolchain, and qemu compiled for
-riscv64-softmmu.  Once they are installed, and in your shell
-search path, you can run "make qemu".
+### To build the kernel:
+```
+make
+```
+
+### To build the userspace applications and tun the OS
+```
+make qemu
+```
+
+### To exit xv6
+```
+ctrl-a ctrl-x
+```
+
+
