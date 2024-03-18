@@ -17,6 +17,10 @@ The second is int getpinfo(struct pstat *). This routine returns some informatio
 
 Good examples of how to pass arguments into the kernel are found in existing system calls. In particular, follow the path of read(), which will lead you to sys_read(), which will show you how to use argptr() (and related calls) to obtain a pointer that has been passed into the kernel. Note how careful the kernel is with pointers passed from user space -- they are a security threat, and thus must be checked very carefully before usage.
 
+### Pseudo random number generator
+
+You'll need to add a function to generate random numbers in the kernel; some searching should lead you to a simple pseudo-random number generator, which you can then include in the kernel and use as appropriate.  This is the only code you may use from an external source.
+
 ### ps
 
 Your ps application will print the following:
