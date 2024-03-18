@@ -61,7 +61,9 @@ struct pstat {
 ## Graph
 
 You'll have to make a graph for this assignment. The graph should show the number of time slices a set of three processes receives
-over time, where the processes have a 3:2:1 ratio of tickets (e.g., process A might have 30 tickets, process B 20, and process C 10). The graph is likely to be pretty boring, but should clearly show that your lottery scheduler works as desired.  THe graph must be submitted as a PDF file at the top level of your repo.
+over time, where the processes have a 3:2:1 ratio of tickets (e.g., process A might have 30 tickets, process B 20, and process C 10). The graph is likely to be pretty boring, but should clearly show that your lottery scheduler works as desired.  The graph must be submitted as a PDF file at the top level of your repo.
+
+To gather this data you will need to write an application that forks three children and each child runs measuring the amount of the processor time each gets.
 
 ## BUILDING AND RUNNING XV6
 
