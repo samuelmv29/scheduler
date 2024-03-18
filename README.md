@@ -8,7 +8,7 @@ In this assignment you will be implementing a lottery scheduler, the user progra
 You will implement a system call that will set an attribute, color, of a process.  The valid colors a process can be assigned are RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, and VIOLET.  You will store the color of a process in its process control block.  This routine should return 0 if successful, and -1 otherwise (if, for example, the caller passes in an invalid color).
 
 ### int setTickets(int)
-This system call sets the number of tickets of the calling process. By default, each process should get one ticket; calling this routine makes it such that a process can raise the number of tickets it receives, and thus receive a higher proportion of CPU cycles. This routine should return 0 if successful, and -1 otherwise (if, for example, the caller passes in a number less than one). The number of tickets a process can have an itneger value of the range 1 to 256.
+This system call sets the number of tickets of the calling process. By default, each process should get one ticket; calling this routine makes it such that a process can raise the number of tickets it receives, and thus receive a higher proportion of CPU cycles. This routine should return 0 if successful, and -1 otherwise (if, for example, the caller passes in a number less than one). The number of tickets a process can have an integer value of the range 1 to 256.
 
 You'll need to assign tickets to a process when it is created. Specfically, you'll need to make sure a child process inherits the same number of tickets as its parents. Thus, if the parent has 10 tickets, and calls fork() to create a child process, the child should also get 10 tickets.
 
