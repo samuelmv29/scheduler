@@ -2,128 +2,114 @@
 #include "kernel/stat.h"
 #include "user/user.h"
 
-
-
-
 enum COLOR {RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, VIOLET};
 
 enum procstate { UNUSED, USED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 
+#include "kernel/pstat.h"
 
-
-#include "kernel/pstat.h" // Include the definition of the pstat structure
-
-// Helper function to convert color enum to string
-const char* color_to_string(enum COLOR c) {
-    switch (c) {
-        case RED: printf("%s","RED");
-        case ORANGE: return "ORANGE";
-        case YELLOW: return "YELLOW";
-        case GREEN: return "GREEN";
-        case BLUE: return "BLUE";
-        case INDIGO: return "INDIGO";
-        case VIOLET: return "VIOLET";
-        default: return "UNKNOWN";
-    }
-}
-
-// Helper function to convert state enum to string
-const char* state_to_string(enum procstate s) {
-    switch (s) {
-        case UNUSED: return "UNUSED";
-        case USED: return "USED";
-        case SLEEPING: return "SLEEPING";
-        case RUNNABLE: return "RUNNABLE";
-        case RUNNING: return "RUNNING";
-        case ZOMBIE: return "ZOMBIE";
-        default: return "UNKNOWN";
-    }
-}
-
-
-void ps() 
+int main(int argc, char *argv[]) 
 {
-    struct pstat ps;
 
-    // Invoke the getpinfo system call to fetch process information
-    int sys_call_ret = getpinfo(&ps);
+  struct pstat process_state;
 
-    if (sys_call_ret == -1) {
-        printf("Error retrieving process information\n");
-        return;
-    }
+  int sys_call_ret = getpinfo(&process_state);
 
-    // Print the header
-    printf("NAME\tPID\tSTATUS\t\tCOLOR\tTICKETS\n");
+  if (sys_call_ret == -1) 
+  {
+    return -1;
+  }
 
-    // Iterate over the process table and print process information
-    for (int i = 0; i < NPROC; i++) 
+  
+  printf("NAME\tPID\tSTATUS\t\tCOLOR\tTICKETS\n");
+
+  
+  for (int i = 0; i < NPROC; i++) 
+  {
+    if (process_state.inuse[i]) 
     {
-        
-        if (ps.inuse[i]) 
+        printf("%s\t%d\t", process_state.name[i], process_state.pid[i]);
+
+      
+        if (process_state.state[i] == UNUSED)
         {
- 
-            printf("%s\t%d\t", ps.name[i], ps.pid[i]);
+            printf("UNUSED\t\t");
+        }
         
-            switch (ps.state[i]) 
-            {
-                case UNUSED:
-                    printf("UNUSED\t\t");
-                break;
-                case USED:
-                    printf("USED\t\t");
-                    break;
-                case SLEEPING:
-                    printf("SLEEPING\t");
-                    break;
-                case RUNNABLE:
-                    printf("RUNNABLE\t");
-                    break;
-                case RUNNING:
-                    printf("RUNNING\t\t");
-                    break;
-                case ZOMBIE:
-                    printf("ZOMBIE\t\t");
-                    break;
-                default:
-                    printf("UNKNOWN\t\t");
-            }
-        
-            switch (ps.color[i]) 
-            {
-                case RED:
-                    printf("RED\t");
-                    break;
-                case ORANGE:
-                    printf("ORANGE\t");
-                    break;
-                case YELLOW:
-                    printf("YELLOW\t");
-                    break;
-                case GREEN:
-                    printf("GREEN\t");
-                    break;
-                case BLUE:
-                    printf("BLUE\t");
-                    break;
-                case INDIGO:
-                    printf("INDIGO\t");
-                    break;
-                case VIOLET:
-                    printf("VIOLET\t");
-                    break;
-                default:
-                    printf("UNKNOWN\t");
-            }
-        
-            printf("%d\n", ps.tickets[i]);
+        else if (process_state.state[i] == USED)
+        {
+            printf("USED\t\t");
+        }
+        else if (process_state.state[i] == SLEEPING)
+        {
+            printf("SLEEPING\t");
         }
 
-    }
-    
-}
+        else if (process_state.state[i] == RUNNABLE)
+        {
+            printf("RUNNABLE\t");
+        }
+        
+        else if (process_state.state[i] == RUNNING)
+        {
+            printf("RUNNING\t\t");
+        }
+        
+        else if (process_state.state[i] == ZOMBIE)
+        {
+            printf("ZOMBIE\t\t");
+        }
+        
+        else
+        {
+            printf("UNKNOWN\t\t");
+        }
 
-int main(int argc, char *argv[]) {
-    ps(); // Call the ps function to display process information
-    return 0;
+
+
+        if (process_state.color[i] == RED)
+        {
+            printf("RED\t");
+        }
+
+        else if (process_state.color[i] == ORANGE)
+        {
+            printf("ORANGE\t");
+        }
+
+        else if (process_state.color[i] == YELLOW)
+        {
+            printf("YELLOW\t");
+        }
+        
+        else if (process_state.color[i] == GREEN)
+        {
+            printf("GREEN\t");
+        }
+        
+        else if (process_state.color[i] == BLUE)
+        {
+            printf("BLUE\t");
+        }
+
+        else if (process_state.color[i] == INDIGO)
+        {
+            printf("INDIGO\t");
+        }
+
+        else if (process_state.color[i] == VIOLET)
+        {
+            printf("VIOLET\t");
+        }
+        
+        else
+        {
+            printf("UNKNOWN\t");
+        }
+        
+        printf("%d\n", process_state.tickets[i]);
+    }
+  }
+
+  return 0;
 }

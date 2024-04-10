@@ -685,20 +685,19 @@ procdump(void)
 }
 
 
-int setColor(struct proc *p, enum COLOR color)
+int setColor(struct proc *myprocess, enum COLOR chosenColor)
 {
-  if (color < RED || color > VIOLET) 
+  if (chosenColor < RED || chosenColor > VIOLET) 
   {
     return -1;
   }
-
-
-  p->color = color;
+  
+  myprocess->color = chosenColor;
 
   return 0; 
 }
 
-int setTickets(struct proc *p, int tickets)
+int setTickets(struct proc *myprocess, int tickets)
 {
  
   if (tickets < 1 || tickets > 256) 
@@ -706,42 +705,36 @@ int setTickets(struct proc *p, int tickets)
     return -1; 
   }
 
-  p->tickets = tickets;
+  myprocess->tickets = tickets;
 
   return 0;
 }
 
 
-int getpinfo(struct pstat* ps) {
+int getpinfo(struct pstat* process_stats) {
     //struct pstat p;
    // memset(&p, 0, sizeof(struct pstat)); // Initialize pstat structure
 
     // Iterate over the process table and populate the temporary pstat structure
-    for (int i = 0; i < NPROC; i++) {
-        // Copy process name
-        strncpy(ps->name[i], proc[i].name, sizeof(proc[i].name));
-        
-        // Copy process state
-        ps->state[i] = proc[i].state;
+    for (int i = 0; i < NPROC; i++) 
+    {
 
-        // Set inuse flag
-        ps->inuse[i] = (proc[i].state != UNUSED) ? 1 : 0;
+      strncpy(process_stats->name[i], proc[i].name, sizeof(proc[i].name));
+      process_stats->state[i] = proc[i].state;
 
-        // Copy process color
-        ps->color[i] = proc[i].color;
+      if (proc[i].state != UNUSED) 
+      {
+        process_stats->inuse[i] = 1;
+      } 
+      else 
+      {
+        process_stats->inuse[i] = 0;
+      }
 
-        // Copy process PID
-        ps->pid[i] = proc[i].pid;
-
-        // Copy process tickets
-        ps->tickets[i] = proc[i].tickets;
+      process_stats->color[i] = proc[i].color;
+      process_stats->pid[i] = proc[i].pid;
+      process_stats->tickets[i] = proc[i].tickets;
     }
 
-    // Copy the populated pstat structure to user space
-   /* int copyout_result = either_copyout(1, (uint64)ps, &p, sizeof(struct pstat));
-    if (copyout_result < 0) {
-        // Return -1 if there's an error copying the pstat structure to user space
-        return -1;
-    }*/
-    return 0; // Return 0 for success
+    return 0; 
 }

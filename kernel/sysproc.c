@@ -115,23 +115,20 @@ sys_uptime(void)
 uint64
 sys_getpinfo(struct pstat * pstats)
 {
-   // struct pstat *pstat_ptr;
-  uint64 i;
-  argaddr(0, &i);
-   // if (argaddr(0, (void*)&pstat_ptr, sizeof(struct pstat)) < 0) {
-   //     return -1; 
+  uint64 address;
+  argaddr(0, &address);
   
-  struct pstat j;
-
-    
-    int result = getpinfo(&j);
-    if(result<0){
-      return -1;
-    }
-    int k = either_copyout(1, i, &j, sizeof(struct pstat));
-    if (k<0) {
-        return -1; 
-    }
+  struct pstat process_stat;
+ 
+  if(getpinfo(&process_stat)<0)
+  {
+    return -1;
+  }
+  
+  if (either_copyout(1, address, &process_stat, sizeof(struct pstat))<0) 
+  {
+    return -1; 
+  }
 
   return 0;
 }
