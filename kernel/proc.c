@@ -5,6 +5,7 @@
 #include "spinlock.h"
 #include "proc.h"
 #include "defs.h"
+#include "pstat.h"
 
 struct cpu cpus[NCPU];
 
@@ -124,6 +125,7 @@ allocproc(void)
 found:
   p->pid = allocpid();
   p->state = USED;
+  p->tickets = 1;
 
   // Allocate a trapframe page.
   if((p->trapframe = (struct trapframe *)kalloc()) == 0){
@@ -680,4 +682,66 @@ procdump(void)
     printf("%d %s %s", p->pid, state, p->name);
     printf("\n");
   }
+}
+
+
+int setColor(struct proc *p, enum COLOR color)
+{
+  if (color < RED || color > VIOLET) 
+  {
+    return -1;
+  }
+
+
+  p->color = color;
+
+  return 0; 
+}
+
+int setTickets(struct proc *p, int tickets)
+{
+ 
+  if (tickets < 1 || tickets > 256) 
+  {
+    return -1; 
+  }
+
+  p->tickets = tickets;
+
+  return 0;
+}
+
+
+int getpinfo(struct pstat* ps) {
+    //struct pstat p;
+   // memset(&p, 0, sizeof(struct pstat)); // Initialize pstat structure
+
+    // Iterate over the process table and populate the temporary pstat structure
+    for (int i = 0; i < NPROC; i++) {
+        // Copy process name
+        strncpy(ps->name[i], proc[i].name, sizeof(proc[i].name));
+        
+        // Copy process state
+        ps->state[i] = proc[i].state;
+
+        // Set inuse flag
+        ps->inuse[i] = (proc[i].state != UNUSED) ? 1 : 0;
+
+        // Copy process color
+        ps->color[i] = proc[i].color;
+
+        // Copy process PID
+        ps->pid[i] = proc[i].pid;
+
+        // Copy process tickets
+        ps->tickets[i] = proc[i].tickets;
+    }
+
+    // Copy the populated pstat structure to user space
+   /* int copyout_result = either_copyout(1, (uint64)ps, &p, sizeof(struct pstat));
+    if (copyout_result < 0) {
+        // Return -1 if there's an error copying the pstat structure to user space
+        return -1;
+    }*/
+    return 0; // Return 0 for success
 }

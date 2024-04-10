@@ -1,4 +1,7 @@
 struct stat;
+struct proc;
+enum COLOR;
+struct pstat;
 
 // system calls
 int fork(void);
@@ -22,6 +25,10 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
+int setColor(struct proc*, enum COLOR);
+int setTickets(struct proc*, int);
+int getpinfo(struct pstat*);
+
 
 // ulib.c
 int stat(const char*, struct stat*);

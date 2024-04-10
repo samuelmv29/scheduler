@@ -8,6 +8,8 @@ struct spinlock;
 struct sleeplock;
 struct stat;
 struct superblock;
+struct pstat;
+enum COLOR;
 
 // bio.c
 void            binit(void);
@@ -106,6 +108,9 @@ void            yield(void);
 int             either_copyout(int user_dst, uint64 dst, void *src, uint64 len);
 int             either_copyin(void *dst, int user_src, uint64 src, uint64 len);
 void            procdump(void);
+int             setColor(struct proc*, enum COLOR);
+int             setTickets(struct proc*, int);
+int             getpinfo(struct pstat*);
 
 // swtch.S
 void            swtch(struct context*, struct context*);
